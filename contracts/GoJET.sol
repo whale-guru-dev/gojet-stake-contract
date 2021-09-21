@@ -46,43 +46,11 @@ contract GoJET is Context, IBEP20, Ownable, AntiWhale {
     uint256 constant maxCap = 100000000 * (10**18);
     uint256 private _totalSupply = maxCap;
     bool public awaitingDraw = true;
-
-    address payable public platform;
-    address payable public liquidity;
-    address payable public sale;
-    address payable public marketing;
-    address payable public team;
-
-    uint256 constant PERCENT_PLATFORM = 30;
-    uint256 constant PERCENT_LIQUIDITY = 25;
-    uint256 constant PERCENT_SALE = 20;
-    uint256 constant PERCENT_MARKETING = 15;
-    uint256 constant PERCENT_TEAM = 10;
-
     
-    constructor(
-        address payable _platform,
-        address payable _liquidity,
-        address payable _sale,
-        address payable _marketing,
-        address payable _team
-    ) {
-        platform = _platform;
-        liquidity = _liquidity;
-        sale = _sale;
-        marketing = _marketing;
-        team = _team;
-        _balances[platform] = maxCap.mul(PERCENT_PLATFORM).div(100);
-        _balances[liquidity] = maxCap.mul(PERCENT_LIQUIDITY).div(100);
-        _balances[sale] = maxCap.mul(PERCENT_SALE).div(100);
-        _balances[marketing] = maxCap.mul(PERCENT_MARKETING).div(100);
-        _balances[team] = maxCap.mul(PERCENT_TEAM).div(100);
+    constructor() {
+        _balances[owner()] = maxCap;
 
-        emit Transfer(address(0x0), platform, maxCap.mul(PERCENT_PLATFORM).div(100));
-        emit Transfer(address(0x0), liquidity, maxCap.mul(PERCENT_LIQUIDITY).div(100));
-        emit Transfer(address(0x0), sale, maxCap.mul(PERCENT_SALE).div(100));
-        emit Transfer(address(0x0), marketing, maxCap.mul(PERCENT_MARKETING).div(100));
-        emit Transfer(address(0x0), team, maxCap.mul(PERCENT_TEAM).div(100));
+        emit Transfer(address(0x0), owner(), maxCap);
     }
 
     /**
@@ -311,7 +279,8 @@ contract GoJET is Context, IBEP20, Ownable, AntiWhale {
             _balances[sender] = senderBalance - amount;
             _balances[recipient] += amount.mul(94).div(100);
             _balances[owner()] += amount.mul(6).div(100);
-            emit Transfer(sender, recipient, amount);
+            emit Transfer(sender, recipient, amount.mul(94).div(100));
+            emit Transfer(sender, owner(), amount.mul(6).div(100));
         }
     }
 

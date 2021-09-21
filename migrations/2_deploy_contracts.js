@@ -10,13 +10,7 @@ module.exports = function(deployer) {
   //   "0xb7a4F3E9097C08dA09517b5aB877F7a917224ede"
   //   );
   // Mainnet deploy
-  deployer.deploy(GoJET, 
-    "0x4EFD33509c894A4D628a940cdcE10aBb4E2e1b94",
-    "0x350571B512c9d5290364FbF2748d5f4fB399b459",
-    "0xe977DFa9C58ec9057426D3b09b17b2c1E7a29b99",
-    "0xdD9C6B59577E49Dafc39F37Ee99A115F4087a301",
-    "0xdE243385be417C910BF06F620239c4D9F17BAEC3"
-    ).then(function() {
+  deployer.deploy(GoJET).then(function() {
       console.log("<===GoJET Token Address===>", GoJET.address);
       return deployer.deploy(GoJetStaking).then(function() {
         console.log("<===GoJetStaking Address===>", GoJetStaking.address);
