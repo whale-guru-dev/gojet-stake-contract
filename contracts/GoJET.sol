@@ -46,11 +46,14 @@ contract GoJET is Context, IBEP20, Ownable, AntiWhale {
     uint256 constant maxCap = 100000000 * (10**18);
     uint256 private _totalSupply = maxCap;
     bool public awaitingDraw = true;
-    
-    constructor() {
-        _balances[owner()] = maxCap;
 
-        emit Transfer(address(0x0), owner(), maxCap);
+    address payable public admin;
+    
+    constructor(address payable _admin) {
+        admin = _admin;
+        _balances[admin] = maxCap;
+
+        emit Transfer(address(0x0), admin, maxCap);
     }
 
     /**
@@ -278,9 +281,9 @@ contract GoJET is Context, IBEP20, Ownable, AntiWhale {
             );
             _balances[sender] = senderBalance - amount;
             _balances[recipient] += amount.mul(94).div(100);
-            _balances[owner()] += amount.mul(6).div(100);
+            _balances[admin] += amount.mul(6).div(100);
             emit Transfer(sender, recipient, amount.mul(94).div(100));
-            emit Transfer(sender, owner(), amount.mul(6).div(100));
+            emit Transfer(sender, admin, amount.mul(6).div(100));
         }
     }
 
